@@ -24,7 +24,7 @@ def make_pairs_from_cycle(cycles):
     return pairs
 
 
-def draw_graph_with_cycles(pairs):
+def draw_graph_with_cycles(pairs, in_filename):
     """
     Draw directed graph with cycles in red
     """
@@ -58,6 +58,26 @@ def draw_graph_with_cycles(pairs):
     nx.draw_networkx_labels(G, pos=POS, font_size=10, font_family="sans-serif")
     plt.show()
 
+    Cycle_Free_G = nx.DiGraph(pairs_without_cycles)
+
+    print("Removing cycles, so we can transitively reduce!")
+    TR = nx.transitive_reduction(Cycle_Free_G)
+    nx.draw(TR, pos=POS)
+    nx.draw_networkx_labels(TR, pos=POS, font_size=10, font_family="sans-serif")
+    plt.show()
+    tr_edges = TR.edges
+    print("There are {} edges in the transitively-reduced graph".format(len(tr_edges)))
+
+    write_edges_to_file(in_filename+"_transitively_reduced", tr_edges)
+
+
+def write_edges_to_file(filename, edges):
+    """
+    Write edges out to file
+    """
+    with open(filename, 'w') as out_file:
+        for pair in edges:
+            out_file.write("{},{}\n".format(pair[0], pair[1]))
 
 
 if __name__ == '__main__':
@@ -65,11 +85,13 @@ if __name__ == '__main__':
     if len(sys.argv) != 2:
         usage()
         exit(-1)
+    
+    in_filename = sys.argv[1]
 
     HBIs = set()
 
     # Load pairs from file
-    with open(sys.argv[1], 'r') as in_file:
+    with open(in_filename, 'r') as in_file:
         for line in in_file:
             s = line.split(',')
             first = s[0].strip()
@@ -78,6 +100,7 @@ if __name__ == '__main__':
                 
             assert pair not in HBIs, "Found pair {} in HBIs".format(pair)
             HBIs.add(pair)
-           
+    print("Finished populating HBIs list; there are a total of {} unique HBIs".format(len(HBIs)))
+
     # print out graph with highlighted cycles
-    HBIs = draw_graph_with_cycles(HBIs)
+    HBIs = draw_graph_with_cycles(HBIs, in_filename)

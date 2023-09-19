@@ -1,0 +1,3 @@
+../../texada -l --no-vacuous-findings -f '(F(a) -> ((!(F(b)) | (!(b) U (a & !(F((a & b)))))) & !(F(!((!(a) | !(X(F(a))))))) & !(F(!((!(b) | !(X(F(b)))))))))' --log-file all_array/alltrace.log --parse-mult-prop > alltrace_template1_novac_prefix.txt
+
+../../texada -l --no-vacuous-findings -f '(Fa & Fb) -> (!F!(!a | !XFb) & !F!(!b | !XFb) & (!Fb | (!b U (a & !F(a & b)))))' --log-file all_array/alltrace.log --parse-mult-prop > alltrace_template2_novac_prefix.txt
