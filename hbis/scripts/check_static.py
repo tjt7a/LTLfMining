@@ -62,11 +62,12 @@ def draw_graph_with_cycles(pairs, in_filename):
 
     print("Removing cycles, so we can transitively reduce!")
     TR = nx.transitive_reduction(Cycle_Free_G)
+    tr_edges = TR.edges
+    print("There are {} edges in the transitively-reduced graph".format(len(tr_edges)))
+    
     nx.draw(TR, pos=POS)
     nx.draw_networkx_labels(TR, pos=POS, font_size=10, font_family="sans-serif")
     plt.show()
-    tr_edges = TR.edges
-    print("There are {} edges in the transitively-reduced graph".format(len(tr_edges)))
 
     write_edges_to_file(in_filename+"_transitively_reduced", tr_edges)
 

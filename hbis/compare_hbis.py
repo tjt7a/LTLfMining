@@ -27,7 +27,7 @@ if __name__ == '__main__':
     first_filename = sys.argv[1]
     second_filename = sys.argv[2]
 
-    first_hbis = load_pairs_from_file(first_filename)
+    first_hbis = load_pairs_from_file(first_filename, ' ')
     second_hbis = load_pairs_from_file(second_filename, ',')
 
     # Summarize
